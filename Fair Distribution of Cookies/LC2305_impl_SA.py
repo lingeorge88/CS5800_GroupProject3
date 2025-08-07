@@ -4,18 +4,18 @@ import math
 def distributeCookies(cookies, k):
     n = len(cookies)
     
-    # Initialize: random assignment of bags to children
+    # initialize: random assignment of bags to children
     assignment = [random.randint(0, k-1) for _ in range(n)]
     
     def calculate_unfairness(assignment):
-        # Calculate max cookies any child has
+        # calculate max cookies any child has
         child_cookies = [0] * k
         for bag_idx, child in enumerate(assignment):
             child_cookies[child] += cookies[bag_idx]
         return max(child_cookies)
     
     def get_neighbor(assignment):
-        # Generate neighbor: reassign one bag to different child
+        # generate neighbor: reassign one bag to different child
         new_assignment = assignment.copy()
         bag_to_move = random.randint(0, n-1)
         old_child = new_assignment[bag_to_move]
@@ -36,32 +36,30 @@ def distributeCookies(cookies, k):
     iterations = 10000
     
     for i in range(iterations):
-        # Get neighbor solution
         neighbor = get_neighbor(current)
         neighbor_unfairness = calculate_unfairness(neighbor)
         
-        # Calculate change in unfairness
         delta = neighbor_unfairness - current_unfairness
         
-        # Accept or reject
-        if delta < 0:  # Better solution
+        # accept or reject
+        if delta < 0:  # better solution
             current = neighbor
             current_unfairness = neighbor_unfairness
             if current_unfairness < best_unfairness:
                 best = neighbor.copy()
                 best_unfairness = current_unfairness
-        else:  # Worse solution - accept with probability
+        else:  # worse solution, accept with probability
             probability = math.exp(-delta / temperature)
             if random.random() < probability:
                 current = neighbor
                 current_unfairness = neighbor_unfairness
         
-        # Cool down
+        # cool down
         temperature *= cooling_rate
         
-        # Optional: restart if temperature too low
+        # restart if temperature too low
         if temperature < 0.001:
-            temperature = 10.0  # Reheat
+            temperature = 10.0  # reheat
     
     return best_unfairness
 

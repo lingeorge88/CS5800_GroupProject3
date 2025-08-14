@@ -7,11 +7,8 @@ import sys
 import random
 import time
 import statistics as stats
-import os
-import csv
 from typing import List
 import matplotlib.pyplot as plt
-import numpy as np
 import tracemalloc
 
 # Import the Solution class from a separate file named MaximumProfitSol.py

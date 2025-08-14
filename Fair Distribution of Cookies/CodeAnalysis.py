@@ -1,3 +1,8 @@
+# GROUP 6
+# Members: George Lin, Andrew Li, Xiaoti Hu, Mingda Xie
+# Group Project 3 : Fair Distribution of Cookies Analysis
+
+# import libraries and modules
 import random
 import time
 import matplotlib.pyplot as plt
@@ -6,24 +11,24 @@ import matplotlib.pyplot as plt
 from LC2305_impl_SA import distributeCookies as distributeCookiesSA
 from LC2305_impl_bruteforce import distributeCookies as distributeCookiesBF
 
+
 def run_timing_analysis():
     # small sizes for brute force (DFS)
     small_sizes = list(range(2, 12))
     # larger sizes for SA
     large_sizes = list(range(12, 21))
     k = 3
-
+    # Lists to store execution times for each algorithm
     bf_times = []
     sa_times_small = []
     sa_times_large = []
 
-    # Timing Brute Force (DFS)
+    # Timing Brute Force (DFS) for smaller sizes
     for n in small_sizes:
         cookies = [random.randint(1, 20) for _ in range(n)]
         start = time.time()
         distributeCookiesBF(cookies, k)
         bf_times.append(time.time() - start)
-
         start = time.time()
         distributeCookiesSA(cookies, k)
         sa_times_small.append(time.time() - start)
@@ -41,12 +46,14 @@ def run_timing_analysis():
     plt.plot(small_sizes, sa_times_small, marker='o', label='SA (small n)')
     plt.plot(large_sizes, sa_times_large, marker='o', linestyle='--', label='SA (large n)')
     
+    # chart labels and titles
     plt.xlabel("Number of Cookie Bags (n)")
     plt.ylabel("Execution Time (seconds)")
     plt.title("Performance Comparison: SA vs Brute Force DFS")
     plt.legend()
     plt.grid(True)
     plt.show()
-
+    
 if __name__ == "__main__":
     run_timing_analysis()
+

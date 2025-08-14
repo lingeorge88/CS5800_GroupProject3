@@ -1,6 +1,8 @@
 # GROUP 6
 # Members: George Lin, Andrew Li, Xiaoti Hu, Mingda Xie
-# Group Project 3 : Maximum Profit in Job Scheduling
+# Group Project 3 : Maximum Profit in Job Scheduling Solutions
+
+# import libraries
 from typing import List
 import random
 import time
@@ -69,16 +71,12 @@ class Solution:
     ) -> int:
         """
         Greedy heuristic solution for the job scheduling problem.
-
-        This is a fast approximation algorithm that:
         1. Sorts jobs by end time (earliest finish first)
         2. Takes jobs greedily if they don't overlap with previously selected jobs
-        Time Complexity: O(n log n) for sorting
-        Space Complexity: O(n) for job list
         """
         # Combine job data into tuples for easier processing
         jobs = list(zip(startTime, endTime, profit))
-        # Sort by end time (earliest finish first) - this is the greedy choice
+        # Sort by end time (earliest finish first) - greedy choice
         jobs.sort(key=lambda x: x[1])
 
         total_profit = 0
@@ -106,16 +104,22 @@ def test_random_cases(num_cases=10, num_jobs=30, time_range=50):
         num_jobs: Number of jobs per test case
         time_range: Maximum time value for start/end times
     """
+    # initialize solution class
     solver = Solution()
 
     for case in range(num_cases):
+        # Initialize arrays for this test case
         start = []
         end = []
         profit = []
 
+        # Generate random job data
         for _ in range(num_jobs):
+            # Random start time (1 to time_range-1)
             s = random.randint(1, time_range - 1)
+            # Random end time (after start time, up to time_range)
             e = random.randint(s + 1, time_range)
+            # Random profit (1 to 100)
             p = random.randint(1, 100)
             start.append(s)
             end.append(e)
@@ -133,6 +137,7 @@ def test_random_cases(num_cases=10, num_jobs=30, time_range=50):
 
         match = res_opt == res_heur
 
+        # print for quick visualization of results
         print(
             f"Case {case+1}: Match={match}, Optimal={res_opt}, Heuristic={res_heur}, "
             f"Difference={res_opt - res_heur}, DP time={dp_time:.6f}s, Heur time={heur_time:.6f}s"

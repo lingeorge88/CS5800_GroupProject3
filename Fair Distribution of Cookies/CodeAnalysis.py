@@ -6,47 +6,54 @@
 import random
 import time
 import matplotlib.pyplot as plt
+
+# Import functions without triggering their __main__ blocks
 from LC2305_impl_SA import distributeCookies as distributeCookiesSA
 from LC2305_impl_bruteforce import distributeCookies as distributeCookiesBF
 
 
 def run_timing_analysis():
-    # Test problem sizes from 2 to 14 cookie bags
-    sizes = list(range(2, 15))
-    # Number of children to distribute cookies to
+    # small sizes for brute force (DFS)
+    small_sizes = list(range(2, 12))
+    # larger sizes for SA
+    large_sizes = list(range(12, 21))
     k = 3
     # Lists to store execution times for each algorithm
-    sa_times = []
     bf_times = []
+    sa_times_small = []
+    sa_times_large = []
 
-    # Test each problem size
-    for n in sizes:
-        # Generate random cookie bag sizes (1-20 cookies per bag)
+    # Timing Brute Force (DFS) for smaller sizes
+    for n in small_sizes:
         cookies = [random.randint(1, 20) for _ in range(n)]
-
-        # Time the Simulated Annealing algorithm
-        start = time.time()
-        distributeCookiesSA(cookies, k)
-        sa_times.append(time.time() - start)
-
-        # Time the Brute Force algorithm
         start = time.time()
         distributeCookiesBF(cookies, k)
         bf_times.append(time.time() - start)
+        start = time.time()
+        distributeCookiesSA(cookies, k)
+        sa_times_small.append(time.time() - start)
 
-    # Create performance comparison plot
-    plt.figure(figsize=(8, 6))
-    # Plot SA and brute force execution times
-    plt.plot(sizes, sa_times, marker="o", label="Simulated Annealing (Heuristic)")
-    plt.plot(sizes, bf_times, marker="s", label="Brute Force DFS")
+    # Timing SA on larger sizes
+    for n in large_sizes:
+        cookies = [random.randint(1, 20) for _ in range(n)]
+        start = time.time()
+        distributeCookiesSA(cookies, k)
+        sa_times_large.append(time.time() - start)
 
-    # chart and axis label
+    # Plot results
+    plt.figure(figsize=(10,6))
+    plt.plot(small_sizes, bf_times, marker='s', label='Brute Force DFS (small n)')
+    plt.plot(small_sizes, sa_times_small, marker='o', label='SA (small n)')
+    plt.plot(large_sizes, sa_times_large, marker='o', linestyle='--', label='SA (large n)')
+    
+    # chart labels and titles
     plt.xlabel("Number of Cookie Bags (n)")
     plt.ylabel("Execution Time (seconds)")
-    plt.title("Performance Comparison: SA vs Brute Force")
+    plt.title("Performance Comparison: SA vs Brute Force DFS")
     plt.legend()
     plt.grid(True)
     plt.show()
+    
+if __name__ == "__main__":
+    run_timing_analysis()
 
-
-run_timing_analysis()
